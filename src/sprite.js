@@ -31,18 +31,31 @@ class Sprite extends GameObjectClass {
     image,
 
     /**
+     * The location of the sprite in the image.
+     * @memberof Sprite
+     * @property {[Number]} spriteLocation
+     */
+    spriteLocation = image
+      ? [0, 0, image.width, image.height]
+      : undefined,
+
+    /**
      * The width of the sprite. If the sprite is a [rectangle sprite](api/sprite#rectangle-sprite), it uses the passed in value. For an [image sprite](api/sprite#image-sprite) it is the width of the image. And for an [animation sprite](api/sprite#animation-sprite) it is the width of a single frame of the animation.
      * @memberof Sprite
      * @property {Number} width
      */
-    width = image ? image.width : undefined,
+    width = spriteLocation
+      ? spriteLocation[2]
+      : (image ? image.width : undefined),
 
     /**
      * The height of the sprite. If the sprite is a [rectangle sprite](api/sprite#rectangle-sprite), it uses the passed in value. For an [image sprite](api/sprite#image-sprite) it is the height of the image. And for an [animation sprite](api/sprite#animation-sprite) it is the height of a single frame of the animation.
      * @memberof Sprite
      * @property {Number} height
      */
-    height = image ? image.height : undefined,
+    height = spriteLocation
+      ? spriteLocation[3]
+      : (image ? image.height : undefined),
     // @endif
 
     ...props
@@ -50,6 +63,7 @@ class Sprite extends GameObjectClass {
     super.init({
       // @ifdef SPRITE_IMAGE
       image,
+      spriteLocation,
       width,
       height,
       // @endif
@@ -163,10 +177,14 @@ class Sprite extends GameObjectClass {
     if (this.image) {
       this.context.drawImage(
         this.image,
+        this.spriteLocation[0],
+        this.spriteLocation[1],
+        this.spriteLocation[2],
+        this.spriteLocation[3],
         0,
         0,
-        this.image.width,
-        this.image.height
+        this.spriteLocation[2],
+        this.spriteLocation[3]
       );
     }
     // @endif
